@@ -10,8 +10,11 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik-public"
       - "--entrypoints.web.address=:80"
+      - "--api.insecure"
+      - "--api.dashboard=true"
     ports:
       - 80:80
+      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:

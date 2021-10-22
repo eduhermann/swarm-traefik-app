@@ -57,7 +57,11 @@ $ docker network create -d overlay traefik-public
 4 - Efetuar a criação da nova stack no cluster Swarm:
 
 ```
-$ docker stack deploy -c deploy.yml
+$ docker stack deploy -c deploy.yml [NOME_STACK]
 ```
+
+5 - Testes:
+* Acessar a URL definida no passo 2, na porta 80, garantir que o IP ou nome esteja acessível pela máquina que será executado os testes.
+* Acessar a URL definida no passo 2, na porta 8080 para visualizar os stats do Traefik.
 
 ### Enjoy!
