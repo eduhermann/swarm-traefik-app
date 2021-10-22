@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+
+  reverse-proxy:
+    image: traefik:v2.5
+    command:
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik-public"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik-public
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+  webserver:
+    image: web-app:1.0
+    deploy:
+      replicas: 3
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.webserver.rule=Host(`SUA_URL_AQUI`)"
+        - "traefik.http.routers.webserver.entrypoints=web"
+        - "traefik.http.services.webserver.loadbalancer.server.port=5000"
+    networks:
+     - traefik-public
+
+networks:
+  traefik-public:
+    external: true
