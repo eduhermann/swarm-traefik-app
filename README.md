@@ -1,67 +1,70 @@
 # swarm-traefik-app
 
-### Requisitos
+### Requirements
 
-* Docker instalado nos nodes com o cluster Swarm ativo, preferencialmente utilizando os 03 nodes como master.
-* HAProxy instalado e configurado para balancear carga entre os nodes Master do cluster Swarm.
+* Docker installed on three nodes with the Swarm Cluster active. Prefer using the three nodes as master.
+* HAProxy installed and configured for load balancer between nodes Swarm Cluster.
 
-### Topologia
+### Topology
 
-Topologia simples baseada em um cluster  Docker Swarm composto por 03 nodes, 02 nodes para utilização do HAProxy balanceando carga para os nodes Swarm (instalação e configuração do HAProxy não fará parte deste repositório).
+Simple topology based in one cluster Docker Swarm, composed for three nodes, two nodes to HAProxy load balancer (install and configure by HAProxy won't be part of this repository).
 
-![Topologia Swarm Traefik App](https://github.com/eduhermann/swarm-traefik-app/blob/main/diagram.png)
+![Topology Swarm Traefik App](https://github.com/eduhermann/swarm-traefik-app/blob/main/diagram.png)
 
-### Recursos utilizados
+### Resources Used
 
-Aqui estão alguns dos recursos utilizados para realizar o deploy do ambiente.
+Here are some resources used to perform the environment deployment:
 
-Lembrando que é possível adaptar o ambiente caso necessário.
+Remember: you can adaptive the environment, if necessary.
 
-* 05 VMs
-    * S.O. Ubuntu 20.04 LTS
-    * 02 GB de Memória RAM
-    * 02 core CPU
-    * 01 network card
-        * 3 VMs para os nodes Masters
-        * 2 VM para o HAProxy em redundância
+* Main resources:
+    * 05 VMs
+        * S.O. Ubuntu 20.04 LTS
+        * 02 GB RAM
+        * 02 core CPU
+        * 01 network card
 
-É possível remover a camada "High Availability Zone" composta por duas VMs para o HAProxy, deixando somente os 03 nodes Docker Swarm.
+* VMs:
+    * 3 VMs nodes Swarm 
+    * 2 VMs HAProxy
 
-### Executando a aplicação
+It's possible to remove "High Availability Zone" layer (HAProxy zone), but will be necessary to configure DNS resolve to each IP node Docker Swarm.
 
-1 - Efetue o clone do repositório:
+### Running the Application
+
+1 - Clone the repository:
 ```
 $ git clone https://github.com/eduhermann/swarm-traefik-app.git
 ```
 
-2 - Efetuar a alteração das variáveis necessárias de acordo com o seu ambiente:
+2 - Change the necessary variables according to your environment:
 ```
-Arquivo: deploy.yml
-    - "traefik.http.routers.webserver.rule=Host(`SUA_URL_AQUI`)"
+File: deploy.yml
+    - "traefik.http.routers.webserver.rule=Host(`YOU_URL_HERE`)"
 ```
 
-2 - Efetuar o build da imagem da aplicação:
+2 - Build the application image:
 ```
 $ cd ./app-build/
 
 $ docker image build -t web-app:1.0 .
 ```
 
-* A imagem deverá ser enviada a um registry ou então deverá ser efetuado o build em todos os nodes do cluster.
+* The image must be sent to a registry or else it must be built on all nodes of the cluster.
 
-3 - Criação de nova network
+3 - Creating a new network:
 ```
 $ docker network create -d overlay traefik-public
 ```
 
-4 - Efetuar a criação da nova stack no cluster Swarm:
+4 - Create the new stack in the Swarm cluster:
 
 ```
 $ docker stack deploy -c deploy.yml [NOME_STACK]
 ```
 
-5 - Testes:
-* Acessar a URL definida no passo 2, na porta 80, garantir que o IP ou nome esteja acessível pela máquina que será executado os testes.
-* Acessar a URL definida no passo 2, na porta 8080 para visualizar os stats do Traefik.
+5 - Tests:
+* Access the URL defined on step 2, at port 80, ensure that the IP or name will be accessible from machine that will do tests.
+* Access the URL defined on step 2, at port 8080 to visualize the status from Traefik.
 
 ### Enjoy!
