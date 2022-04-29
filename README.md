@@ -9,7 +9,7 @@
 
 Simple topology based in one cluster Docker Swarm, composed for three nodes, two nodes to HAProxy load balancer (install and configure by HAProxy won't be part of this repository).
 
-![Topology Swarm Traefik App](https://github.com/eduhermann/swarm-traefik-app/blob/main/diagram.png)
+![Topology Swarm Traefik App](https://github.com/eduhermann/swarm-traefik-app/blob/main/resources/diagram.png)
 
 ### Resources Used
 
